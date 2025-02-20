@@ -1,0 +1,28 @@
+{% extends 'layouts_hotel/base.html' %}
+{% load static %}
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+
+<section class="hero_in general">
+    <div class="wrapper">
+        <div class="container">
+            <h1 class="fadeInUp"><span></span>Profile Update</h1>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5 mb-5">
+    <h2>Update Profile</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{% url 'App_Auth:profile_view' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+
+{% endblock %}

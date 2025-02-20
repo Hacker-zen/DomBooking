@@ -1,0 +1,241 @@
+{% extends 'layouts_hotel/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}
+Payment
+{% endblock %}
+
+{% block content %}
+<div class="hero_in cart_section">
+    <div class="wrapper">
+        <div class="container">
+            <div class="bs-wizard clearfix">
+                <!-- Breadcrumb Progress Steps -->
+                <div class="bs-wizard-step">
+                    <div class="text-center bs-wizard-stepnum">Your cart</div>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <a href="cart-1.html" class="bs-wizard-dot"></a>
+                </div>
+
+                <div class="bs-wizard-step active">
+                    <div class="text-center bs-wizard-stepnum">Payment</div>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <a href="#0" class="bs-wizard-dot"></a>
+                </div>
+
+                <div class="bs-wizard-step disabled">
+                    <div class="text-center bs-wizard-stepnum">Finish!</div>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <a href="#0" class="bs-wizard-dot"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg_color_1">
+    <div class="container margin_60_35">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="box_cart">
+                    <!-- Payment Form Start -->
+                    <form method="POST" action="{% url 'App_Hotel:payment' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Your Details Section -->
+                        <div class="form_title">
+                            <h3><strong>1</strong>Your Details</h3>
+                            <p>
+                                Mussum ipsum cacilds, vidis litro abertis.
+                            </p>
+                        </div>
+                        <div class="step">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>First name</label>
+                                        {{ user_details_form.first_name }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Last name</label>
+                                        {{ user_details_form.last_name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" id="email_booking" name="email_booking" class="form-control" value="{{ user_details_form.instance.user.email }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Confirm email</label>
+                                        <input type="email" id="email_booking" name="email_booking" class="form-control" value="{{ user_details_form.instance.user.email }}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Telephone</label>
+                                        {{ user_details_form.phone }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <hr>
+
+                        <!-- Payment Section -->
+                        <div class="form_title">
+                            <h3><strong>2</strong>Payment Information</h3>
+                            <p>Mussum ipsum cacilds, vidis litro abertis.</p>
+                        </div>
+                        <div class="step">
+                            <!-- Payment Method Dropdown -->
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <select class="form-control" name="payment_method" id="payment_method" onchange="togglePaymentFields()">
+                                    <option value="" selected>Select Payment Method</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="bank">Bank</option>
+                                    <option value="card">Card</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Cash Payment Field (Amount Only) -->
+                            <div id="cash_payment_fields" style="display: none;">
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="text" name="amount" class="form-control">
+                                </div>
+                            </div>
+                        
+                            <!-- Bank/Card Payment Fields -->
+                            <div id="card_bank_payment_fields" style="display: none;">
+                                <div class="form-group">
+                                    <label>Name on card</label>
+                                    <input type="text" class="form-control" name="name_on_card">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>Card number</label>
+                                            <input type="text" name="card_number" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <img src="{% static 'hotel_section/img/cards_all.svg' %}" alt="Cards" class="cards-payment">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Expiration date</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" name="expire_month" class="form-control" placeholder="MM">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" name="expire_year" class="form-control" placeholder="Year">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Security code</label>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="text" name="ccv" class="form-control" placeholder="CCV">
+                                                    </div>
+                                                </div>
+                                                <div class="col-8">
+                                                    <img src="{% static 'hotel_section/img/icon_ccv.gif' %}" width="50" height="29" alt="ccv">
+                                                    <small>Last 3 digits</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <!-- Submit Button for Payment Form -->
+                        <button type="submit" class="btn_1 full-width">Payment</button>
+                    </form>
+                    <!-- Payment Form End -->
+                </div>
+            </div>
+
+            <!-- Booking Details Sidebar -->
+            <aside class="col-lg-5" id="sidebar">
+                <div class="box_detail">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Room</th>
+                                <th>Duration</th>
+                                <th>Amount/night</th>
+                                <th>Total</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.room.room_type }} -- {{ booking.room.hotel.name }}</td>
+                                <td>{{ booking.stay_duration }}</td>
+                                <td>{{ booking.costing }}</td>
+                                <td>${{ booking.total_cost|floatformat:2 }}</td> 
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div id="total_cart">
+                        <strong>Overall Total: <span class="float-end">${{ total_price }}</span></strong>
+                    </div>
+                    <div class="text-center"><small>No money charged in this step</small></div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript to toggle payment fields based on the selected payment method
+    function togglePaymentFields() {
+        const paymentMethod = document.getElementById("payment_method").value;
+        const cashFields = document.getElementById("cash_payment_fields");
+        const cardBankFields = document.getElementById("card_bank_payment_fields");
+
+        if (paymentMethod === "cash") {
+            cashFields.style.display = "block";
+            cardBankFields.style.display = "none";
+        } else if (paymentMethod === "bank" || paymentMethod === "card") {
+            cashFields.style.display = "none";
+            cardBankFields.style.display = "block";
+        } else {
+            cashFields.style.display = "none";
+            cardBankFields.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock %}

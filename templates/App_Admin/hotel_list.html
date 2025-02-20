@@ -1,0 +1,137 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Hotel List
+{% endblock %}
+{% block content %}
+<style>
+    /* Basic styling for the page and card layout */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f9;
+    }
+
+    /* .list_general {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    } */ */
+
+    /* .list_general ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    } */
+
+    /* .list_general li {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        width: 280px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    } */
+
+    .list_general li:hover {
+        transform: translateY(-5px);
+    }
+
+    .list_general figure {
+        margin: 0;
+        padding: 0;
+    }
+
+    .list_general figure img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .list_general small {
+        color: #888;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .list_general h4 {
+        font-size: 20px;
+        margin: 10px 0;
+    }
+
+    .list_general p {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .hotel_facilities {
+        display: flex;
+        flex-wrap: wrap;
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0 0 0;
+    }
+
+    .hotel_facilities li {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .hotel_facilities img {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
+
+    .btn_1 {
+        padding: 8px 12px;
+        color: #fff;
+        background-color: #4CAF50;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .btn_1.gray {
+        background-color: #888;
+    }
+</style>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="fa fa-table"></i> Hotel List</span>
+        <a class="btn" style="background-color: #0863ec; color: white;" href="{% url 'App_Auth:add_hotel' %}">Add New Hotel</a>
+    </div>
+    <div class="list_general">
+        <ul>
+            {% for hotel in hotels %}
+            <li>
+                <figure>
+                    {% if hotel.images %}
+                        <img src="{{ hotel.images.url }}" alt="{{ hotel.name }}">
+                    {% else %}
+                        <img src="img/default.jpg" alt="No Image Available">
+                    {% endif %}
+                </figure>
+                <h3>{{ hotel.name }} <a href="{% url 'App_Auth:hotel_detail' hotel.id %}" class="btn_1 gray"><i class="fa fa-fw fa-eye"></i> View Hotel</a></h3>
+                <p><b>Location:</b> {{ hotel.location.name }}</p>
+                <hr>
+                <ul class="hotel_facilities">
+                    <b>Amenities: </b><li style="margin-left: 10px;">
+                    {% for amenity in hotel.amenities.all %}
+                        <img src="{{ amenity.icon.url }}" class="img-fluid" alt="Image of {{ amenity.name }}">
+                        {{ amenity.name }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <hr>
+                <p><b>Minimum Price per Night:</b> ${{ hotel.price_per_night }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

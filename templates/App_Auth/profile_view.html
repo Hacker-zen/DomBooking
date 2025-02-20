@@ -1,0 +1,33 @@
+{% extends 'layouts_hotel/base.html' %}
+{% load static %}
+{% block title %}
+My Profile
+{% endblock %}
+
+{% block content %}
+
+<section class="hero_in general">
+    <div class="wrapper">
+        <div class="container">
+            <h1 class="fadeInUp"><span></span>Profile</h1>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5 mb-5">
+    <h2>User Profile</h2>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Email:</strong> {{ profile.user.email }}</p>
+            <p><strong>First Name:</strong> {{ profile.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
+            <p><strong>Phone:</strong> {{ profile.phone }}</p>
+            <p><strong>Address:</strong> {{ profile.address }}</p>
+            <p><strong>City:</strong> {{ profile.city }}</p>
+            <p><strong>Zipcode:</strong> {{ profile.zipcode }}</p>
+            <p><strong>Country:</strong> {{ profile.country }}</p>
+            <a href="{% url 'App_Auth:profile_update' %}" class="btn btn-primary">Edit Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

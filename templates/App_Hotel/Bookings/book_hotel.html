@@ -1,0 +1,41 @@
+{% block title %}
+Book Hotel
+{% endblock %}
+
+{% block content %}
+<h2>Book {{ room.hotel.name }} - {{ room.room_type }}</h2>
+<!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p>Hotel Name : {{ room.hotel }}</p>
+    <p>Room Type: {{ room.room_type }}</p>
+    <p>Price per Night: ${{ room.price_per_night }}</p>
+    <button type="submit">Proceed to Payment</button>
+</form> -->
+
+<h2>Booking Confirmation</h2>
+<p>Booking ID: {{ room.id }}</p>
+<p>Room Type: {{ room.room_type }}</p>
+<p>Check-In Date: {{ room.check_in_date }}</p>
+<p>Check-Out Date: {{ room.check_out_date }}</p>
+<p>Number of Adults: {{ room.guests_adult }}</p>
+<p>Number of Children: {{ room.guests_children }}</p>
+<p>Total Guests: {{ room.total_guest }}</p>
+<p>Payment Status: {{ room.payment_status }}</p>
+
+
+<!-- jQuery UI Datepicker -->
+<!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(function() {
+        $("#id_check_in_date").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $("#id_check_out_date").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    });
+</script> -->
+{% endblock %}

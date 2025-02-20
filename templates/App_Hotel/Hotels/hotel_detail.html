@@ -1,0 +1,263 @@
+{% extends 'layouts_hotel/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}
+Hotel Details
+{% endblock %}
+
+{% block content %}
+<section class="hero_in" style="background-image: url('{{ hotel.images.url }}'); background-size: cover; background-position: center center; background-repeat: no-repeat;">
+    <div style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, 0.5);z-index: 1;">
+
+    </div>
+    <div class="wrapper"  style="z-index: 999;">
+        <div class="container">
+            <h1 class="fadeInUp"><span></span>{{ hotel.name }}</h1>
+            <h2 class="" style="color: white;"><span></span>{{ hotel.location }}</h2>
+        </div>
+        <span class="magnific-gallery">
+            <a href="{% static 'hotel_section/img/gallery/hotel_list_1.jpg' %}" class="btn_photos" title="Photo title" data-effect="mfp-zoom-in">View photos</a>
+            <a href="{% static 'hotel_section/img/gallery/hotel_list_2.jpg' %}" title="Photo title" data-effect="mfp-zoom-in"></a>
+            <a href="{% static 'hotel_section/img/gallery/hotel_list_3.jpg' %}" title="Photo title" data-effect="mfp-zoom-in"></a>
+        </span>
+    </div>
+</section>
+<div class="bg_color_1">
+    <nav class="secondary_nav sticky_horizontal">
+        <div class="container">
+            <ul class="clearfix">
+                <li><a href="#description" class="active">Description</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#sidebar">Booking</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container margin_60_35">
+        <div class="row">
+            <h3>Location: {{ hotel.location }}</h3>
+            <div class="col-lg-8">
+                <section id="description">
+                    <h2>Description</h2>
+                    <p>{{ hotel.description }}</p>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="bullets">
+                                    {% for amenity in hotel.amenities.all %}
+                                        <li>{{ amenity.name }}</li>
+                                    {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                        {% for room in room_types %}
+                            <div class="room_type first">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="{{ room.images.url }}" class="img-fluid" alt="Image of {{ room.room_type }}">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4>Room Type: {{ room.room_type }}</h4>
+                                        <p>Price per Night: ${{ room.price_per_night }}</p>
+                                        <ul class="hotel_facilities">
+                                            {% for amenity in room.amenities.all %}
+											    <li><img src="{{ amenity.icon.url }}" class="img-fluid" alt="Image of {{ amenity.name }}">{{ amenity.name }}</li>
+                                            {% endfor %}
+										</ul>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            {% endfor %}
+                </section>
+                <!-- /section -->
+
+                <!-- Reviews Section -->
+                <section id="reviews">
+                    <h2>Reviews</h2>
+                    <div class="reviews-container">
+                        <!-- /review-box -->
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="review-box clearfix">
+                            <figure class="rev-thumb">
+                                <img src="{% static 'hotel_section/img/icon/default-user.png' %}" alt="">
+                            </figure>
+                            <div class="rev-content">
+                                <div class="rating">
+                                    {% for i in 5|times %}
+                                        <i class="icon-star {% if i <= review.rating %}voted{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <div class="rev-info">
+                                    {{ review.user.first_name }} – {{ review.created_at }}
+                                </div>
+                                <div class="rev-text">
+                                    <p>
+                                        {{ review.comment }}
+                                    </p>
+                                </div>
+                                {% if user.profile in review.likes.all %}
+                                <a href="{% url 'App_Hotel:toggle_like' review.id %}"><i class="icon-thumbs-up-alt"></i></a>
+                                {% else %}
+                                    <a href="{% url 'App_Hotel:toggle_like' review.id %}"><i class="icon-thumbs-up"></i></a>
+                                {% endif %}
+                                <span>{{ review.likes.count }} Likes</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No reviews yet. Be the first to leave a review!</p>
+                    {% endif %}
+                
+                
+                    <!-- Add Review Form -->
+                    {% if user.is_authenticated %}
+                        <h3>Leave a Review</h3>
+                        <form action="{% url 'App_Hotel:submit_review' hotel.pk %}" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Email *</label>
+                                    <input type="email" name="email_review" id="email_review" class="form-control" value="{{ user.email }}" readonly>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Rating *</label>
+                                    <div class="custom-select-form wide">
+                                        {{ review_form.rating }}
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group col-md-12">
+                                    <label>Your Review *</label>
+                                    <textarea name="comment" id="review_text" class="form-control" style="height:130px;"></textarea>
+                                </div>
+                                <div class="form-group col-md-12 add_top_20">
+                                    <input type="submit" value="Submit" class="btn_1" id="submit-review">
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <p>Please <a href="{% url 'App_Auth:login' %}">log in</a> to leave a review.</p>
+                    {% endif %}
+                  </div>
+                </section>
+                <!-- /Reviews Section -->
+
+
+            </div>
+              
+            <aside class="col-lg-4" id="sidebar">
+                <div class="box_detail booking">
+                    <form method="post" action="{% url 'App_Hotel:hotel_detail' hotel.id %}">
+                        {% csrf_token %}
+                        <div class="price" style="padding: 20px;">
+                            <span>${{ hotel.price_per_night }} <small>/ night</small></span>
+                            <div class="score"><span>Good<em>350 Reviews</em></span><strong>7.0</strong></div>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="check_in_date">Check-In Date</label>
+                            <input class="form-control" type="date" id="check_in_date" name="check_in_date" required>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="check_out_date">Check-Out Date</label>
+                            <input class="form-control" type="date" id="check_out_date" name="check_out_date" required>
+                        </div>
+            
+                        <div class="form-group clearfix">
+                            <div class="custom-select-form">
+                                <label for="room">Select Room Type</label>
+                                <select name="room" class="wide form-control"   required>
+                                    {% for room in room_types %}
+                                        <option style="padding: 60px;" value="{{ room.id }}" style="padding: 10px;" >{{ room.room_type }} - ${{ room.price_per_night }}</option> 
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+            
+                        <div class="form-group">
+                            <label>Guests</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="number" class="form-control" name="guests_adult" min="1" value="1" placeholder="Adults" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" class="form-control" name="guests_children" min="0" value="0" placeholder="Children">
+                                </div>
+                            </div>
+                        </div>
+            
+                        <button type="submit" class="btn btn-primary full-width mt-3">Book Now</button>
+                        <div class="text-center mt-2"><small>No money charged in this step</small></div>
+                    </form>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+
+<style>
+
+#sidebar .box_detail.booking {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#sidebar .box_detail.booking .price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    font-size: 18px;
+    border-bottom: 1px solid #ddd;
+}
+
+#sidebar .box_detail.booking .form-group label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+#sidebar .box_detail.booking .form-control {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    /* padding: 10px; */
+}
+
+#sidebar .box_detail.booking .btn {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#sidebar .box_detail.booking .btn-primary {
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+#sidebar .box_detail.booking .btn-primary:hover {
+    background: #ff4a4a;
+    border-color: #ff4a4a;
+}
+
+#sidebar .text-center {
+    color: #777;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+#sidebar .full-width {
+    width: 100%;
+}
+    
+</style>
+
+
+
+{% endblock %}

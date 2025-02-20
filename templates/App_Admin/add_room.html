@@ -1,0 +1,62 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Add Room
+{% endblock %}
+{% block content %}
+
+<div class="container" style="max-width: 600px; margin-top: 20px;">
+    <h2 class="text-center">Add Room</h2>
+
+    <form method="post" enctype="multipart/form-data" style="background: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+        {% csrf_token %}
+        
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            <label for="hotel">Hotel:</label>
+            {{ form.hotel }}
+        </div>
+
+        <div class="form-group">
+            <label for="room_type">Room Type:</label>
+            {{ form.room_type }}
+        </div>
+
+        <div class="form-group">
+            <label for="amenities">Amenities:</label>
+            <div style="display: flex; flex-wrap: wrap;">
+                {% for checkbox in form.amenities %}
+                    <div class="form-check mr-3" style="width: 45%;">
+                        {{ checkbox.tag }} {{ checkbox.choice_label }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="number_of_beds">Number of Beds:</label>
+            {{ form.number_of_beds }}
+        </div>
+
+        <div class="form-group">
+            <label for="price_per_night">Price per Night:</label>
+            {{ form.price_per_night }}
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" name="is_available" class="form-check-input" id="is_available" {% if form.is_available.value %} checked {% endif %}>
+            <label for="is_available" class="form-check-label">Available</label>
+        </div>
+
+        <div class="form-group">
+            <label for="images">Room Images:</label>
+            {{ form.images }}
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Save Room</button>
+        <a href="{% url 'App_Auth:room_list' %}" class="btn btn-secondary mt-3">Back to Rooms</a>
+    </form>
+</div>
+
+{% endblock %}

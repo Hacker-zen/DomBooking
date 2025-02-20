@@ -1,0 +1,149 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Add Hotel
+{% endblock %}
+{% block content %}
+
+<!-- Custom CSS for styling -->
+<style>
+    .hotel-form {
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .hotel-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .hotel-form .form-group label {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .hotel-form .form-group input,
+    .hotel-form .form-group select,
+    .hotel-form .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .hotel-form .form-group textarea {
+        height: 120px;
+    }
+
+    .hotel-form .amenities-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hotel-form .amenity-checkbox {
+        display: flex;
+        align-items: center;
+    }
+
+    .hotel-form .amenity-checkbox label {
+        font-size: 14px;
+        margin-left: 8px;
+    }
+
+    .hotel-form .btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+
+    .hotel-form .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .hotel-form .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .hotel-form .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .hotel-form .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .hotel-form .form-group input[type="file"] {
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    .hotel-form .text-center {
+        margin-top: 20px;
+    }
+</style>
+
+
+<div class="container" style="max-width: 900px; margin-top: 40px;">
+    <h2 class="text-center mb-4">Add New Hotel</h2>
+
+    <form method="post" enctype="multipart/form-data" class="hotel-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="name">Hotel Name:</label>
+            {{ form.name }}
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location:</label>
+            {{ form.location }}
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            {{ form.description }}
+        </div>
+
+        <div class="form-group">
+            <label for="amenities">Amenities:</label>
+            <div class="amenities-container">
+                {% for amenity in form.amenities %}
+                    <div class="amenity-checkbox">
+                        <label class="checkbox-container">{{ amenity }}
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="price_per_night">Price per Night:</label>
+            {{ form.price_per_night }}
+        </div>
+
+        <div class="form-group">
+            <label for="images">Hotel Main Image:</label>
+            {{ form.images }}
+        </div>
+
+        <div class="form-group">
+            <label for="featured_images">Featured Image:</label>
+            {{ form.featured_images }}
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Save Hotel</button>
+            <a href="{% url 'App_Auth:hotel_list' %}" class="btn btn-secondary ml-3">Back to Hotels</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

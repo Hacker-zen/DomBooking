@@ -1,0 +1,63 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Room
+{% endblock %}
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="fa fa-table"></i> Room List</span>
+        <a class="btn" style="background-color: #0863ec; color: white;" href="{% url 'App_Auth:add_room' %}">Add New Room</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Hotel</th>
+                        <th>Room Type</th>
+                        <th>Number of Beds</th>
+                        <th>Price Per Night</th>
+                        <th>Available</th>
+                        <th>Image</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Hotel</th>
+                        <th>Room Type</th>
+                        <th>Number of Beds</th>
+                        <th>Price Per Night</th>
+                        <th>Available</th>
+                        <th>Image</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for room in rooms %}
+                    <tr>
+                        <td>{{ room.id }}</td>
+                        <td>{{ room.hotel.name }}</td>
+                        <td>{{ room.room_type }}</td>
+                        <td>{{ room.number_of_beds }}</td>
+                        <td>{{ room.price_per_night }}</td>
+                        <td>{{ room.is_available }}</td>
+                        <td>
+                            {% if room.images %}
+                                <img src="{{ room.images.url }}" alt="{{ room.room_type }}" width="50">
+                            {% else %}
+                                No Image
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

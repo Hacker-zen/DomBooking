@@ -1,0 +1,83 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Payment List
+{% endblock %}
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="fa fa-table"></i> Payment List</span>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Hotel | Room</th>
+                        <th>Amount</th>
+                        <!-- <th>Payment Method</th> -->
+                        <th>Payment Date</th>
+                        <th>Paid</th>
+                        <th>Confirmed</th>
+                        <th>Cancelled</th>
+                        <th>View</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Hotel | Room</th>
+                        <th>Amount</th>
+                        <!-- <th>Payment Method</th> -->
+                        <th>Payment Date</th>
+                        <th>Paid</th>
+                        <th>Confirmed</th>
+                        <th>Cancelled</th>
+                        <th>View</th>
+                        <th>Update</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for payment in payments %}
+                        <tr>
+                            <td>{{ forloop.counter }}.</td>
+                            
+                            <td>{{ payment.customer_name }}</td>
+                            
+                            <td>
+                                {% for booking in payment.booking.all %}
+                                   {{ booking.room.hotel.name }} | {{ booking.room.room_type }}
+                                {% endfor %}
+                            </td>
+                            <td>{{ payment.amount }}</td>
+                            <!-- <td>{{ payment.get_payment_method_display }}</td> -->
+                            <td>{{ payment.payment_date }}</td>
+                            <td>{{ payment.is_paid|yesno:"Yes,No" }}</td>
+                            <td>{{ payment.is_confirmed|yesno:"Yes,No" }}</td>
+                            <td>{{ payment.is_cancelled|yesno:"Yes,No" }}</td>
+                            <td>
+                                <a href="{% url 'App_Auth:view_payment' payment.id %}">View</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'App_Auth:update_payment' payment.id %}">Update</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No payments found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

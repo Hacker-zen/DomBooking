@@ -1,0 +1,160 @@
+{% extends 'layouts_hotel/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="hero_single version_2 jarallax radio_cat" data-jarallax>
+    <!-- <img class="jarallax-img" src="{% static 'hotel_section/img/hero-home-3.jpg' %}" alt="" /> -->
+    <div
+      class="wrapper opacity-mask"
+      data-opacity-mask="rgba(0, 0, 0, 0.6)"
+        >
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-10">
+            <h3>Book unique experiences</h3>
+            <p>
+              Expolore top rated tours, hotels and restaurants around the
+              world
+            </p>
+            <div class="switch-field">
+              <input
+                type="radio"
+                id="Tours"
+                name="listing_filter"
+                value="tours"
+                checked
+              />
+              <label for="Tours"
+                ><img src="{% static 'hotel_section/img/tours_icon_cat.svg' %}" alt="" />Tours</label
+              >
+              <input
+                type="radio"
+                id="Hotels"
+                name="listing_filter"
+                value="hotels"
+              />
+              <label for="Hotels"
+                ><img src="{% static 'hotel_section/img/hotel_icon_cat.svg' %}" alt="" />Hotels</label
+              >
+              <input
+                type="radio"
+                id="Restaurants"
+                name="listing_filter"
+                value="restaurants"
+              />
+              <label for="Restaurants"
+                ><img
+                  src="{% static 'hotel_section/img/restaurant_icon_cat.svg' %}"
+                  alt=""
+                />Restaurants</label
+              >
+              <input
+                type="radio"
+                id="Adventure"
+                name="listing_filter"
+                value="adventure"
+              />
+              <label for="Adventure"
+                ><img
+                  src="{% static 'hotel_section/img/adventure_icon_cat.svg' %}"
+                  alt=""
+                />Adventure</label
+              >
+            </div>
+            <form action="{% url 'App_Hotel:hotel_list' %}">
+              <div class="row g-0 custom-search-input-2">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Where..."
+                      id="autocomplete"
+                    />
+                    <i class="icon_pin_alt"></i>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="dates"
+                      placeholder="When.."
+                    />
+                    <i class="icon_calendar"></i>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="panel-dropdown">
+                    <a href="#">Guests <span class="qtyTotal">1</span></a>
+                    <div class="panel-dropdown-content">
+                      <!-- Quantity Buttons -->
+                      <div class="qtyButtons">
+                        <label>Adults</label>
+                        <input type="text" name="qtyInput" value="1" />
+                      </div>
+                      <div class="qtyButtons">
+                        <label>Childrens</label>
+                        <input type="text" name="qtyInput" value="0" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-2">
+                  <input
+                    type="submit"
+                    class="btn_search"
+                    value="Search"
+                  />
+                </div>
+              </div>
+              <!-- /row -->
+            </form>
+          </div>
+        </div>
+        <!-- /row -->
+      </div>
+      <!-- /container -->
+    </div>
+  </section>
+
+
+<div class="container container-custom margin_80_0">
+    <div class="main_title_2">
+        <span><em></em></span>
+        <h2>Our Popular Hotels</h2>
+        <p>Explore top-rated hotels around the world.</p>
+    </div>
+    <div id="reccomended" class="owl-carousel owl-theme" data-cue="zoomIn">
+        {% for hotel in hotels %}
+        <div class="item">
+            <div class="box_grid">
+                <figure>
+                    <a href="#0" class="wish_bt"></a>
+                    <a href="{% url 'App_Hotel:hotel_detail' hotel.id %}">
+                        <img src="{{ hotel.images.url }}" class="img-fluid" alt="{{ hotel.name }}" width="800" height="533">
+                        <div class="read_more"><span>Read more</span></div>
+                    </a>
+                    <small>{{ hotel.location.name }}</small>
+                </figure>
+                <div class="wrapper">
+                    <h3><a href="{% url 'App_Hotel:hotel_detail' hotel.id %}">{{ hotel.name }}</a></h3>
+                    <p>{{ hotel.description|truncatewords:15 }}</p>
+                    <span class="price">From <strong>${{ hotel.price_per_night }}</strong> /night</span>
+                </div>
+                <ul>
+                    <li><i class="icon_clock_alt"></i> Available</li>
+                    <li><div class="score"><span>Excellent<em>{{ hotel.amenities.count }} Amenities</em></span></div></li>
+                </ul>
+            </div>
+        </div>
+        {% empty %}
+        <p>No hotels found.</p>
+        {% endfor %}
+    </div>
+    <p class="btn_home_align"><a href="{% url 'App_Hotel:hotel_list' %}" class="btn_1 rounded">View all Hotels</a></p>
+    <hr class="large">
+</div>
+
+{% endblock %}

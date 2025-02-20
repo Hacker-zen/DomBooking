@@ -1,0 +1,78 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Hotel Details
+{% endblock %}
+{% block content %}
+<style>
+    /* Styling for hotel and room details */
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f9; }
+    .hotel_details, .room_list { margin-bottom: 20px; }
+    .hotel_card { background-color: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+    .room_card { display: flex; align-items: center; padding: 20px; background-color: #fff; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+    .room_card img { width: 100px; height: auto; border-radius: 8px; margin-right: 20px; }
+    .list_general { padding: 0; list-style: none; }
+</style>
+<div class="hotel_details hotel_card">
+    <figure>
+        {% if hotel.images %}
+            <img style="width: 100%; height: auto; max-height: 400px; object-fit: cover; border-radius: 8px;"src="{{ hotel.images.url }}" alt="{{ hotel.name }}">
+        {% else %}
+            <img style="width: 100%; height: auto; max-height: 400px; object-fit: cover; border-radius: 8px;" src="{% static 'admin_section/img/default.jpg' %}" alt="No Image Available">
+        {% endif %}
+    </figure>
+    <p><strong>Location:</strong> {{ hotel.location.name }}</p>
+    <p><strong>Price per Night:</strong> ${{ hotel.price_per_night }}</p>
+    <p><strong>Description:</strong> {{ hotel.description }}</p>
+    <ul>
+        <strong>Amenities:</strong>
+        {% for amenity in hotel.amenities.all %}
+            <li>{{ amenity.name }}</li>
+        {% endfor %}
+    </ul>
+</div>
+<div style="display: flex; justify-content: flex-end; padding: 20px;">
+    <a href="{% url 'App_Auth:add_room' %}" class="btn_1 gray" style="padding: 10px 20px; background-color: #0863ec; color: white;  text-decoration: none; border-radius: 5px;">Add New Room</a>
+</div>
+
+<div class="list_general" style="padding: 30px; ">
+    <ul>
+        {% for room in rooms %}
+        <li class="room_card" style="margin-bottom: 10px;">
+            <figure>
+                {% if room.images %}
+                    <img src="{{ room.images.url }}" alt="{{ room.room_type }}">
+                {% else %}
+                    <img src="img/default-room.jpg" alt="No Image Available">
+                {% endif %}
+            </figure>
+            <div>
+                <h4>{{ room.room_type }}
+                    {% if not room.is_available %}<i class="pending">Pending</i>{% endif %}
+                </h4>
+                <ul class="booking_list" style="margin-bottom: 20px;">
+                    <li><strong>Number of Beds:</strong> {{ room.number_of_beds }}</li>
+                    <li><strong>Price per Night:</strong> ${{ room.price_per_night }}</li>
+                    <li><strong>Availability:</strong> {{ room.is_available|yesno:"Available,Unavailable" }}</li>
+                </ul>
+                <ul class="hotel_facilities" style="margin-bottom: 20px;">
+                    <li style="list-style-type: none;">
+                        <b>Amenities: </b>
+                    {% for amenity in hotel.amenities.all %}
+                        <img src="{{ amenity.icon.url }}" class="img-fluid" alt="Image of {{ amenity.name }}" style="width: 50px;">
+                        <!-- {{ amenity.name }} -->
+                    {% endfor %}
+                    </li>
+                </ul>
+            </div>
+        </li>
+        {% empty %}
+        <li class="room_card" style="margin-bottom: 10px;">
+        <p>No rooms available for this hotel.</p>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Payment Details
+{% endblock %}
+{% block content %}
+
+<h2>Payment Details</h2>
+<p><strong>Amount:</strong> {{ payment.amount }}</p>
+<p><strong>Payment Method:</strong> {{ payment.get_payment_method_display }}</p>
+<p><strong>Payment Date:</strong> {{ payment.payment_date }}</p>
+<p><strong>Is Paid:</strong> {{ payment.is_paid }}</p>
+<p><strong>Is Cancelled:</strong> {{ payment.is_cancelled }}</p>
+<p><strong>Is Confirmed:</strong> {{ payment.is_confirmed }}</p>
+<p><strong>Bookings:</strong>
+    <ul>
+        {% for booking in payment.booking.all %}
+            <li>{{ booking.room.hotel.name }} - {{ booking.room.room_type }}</li>
+        {% endfor %}
+    </ul>
+</p>
+<a href="{% url 'App_Auth:payment_list' %}">Back to Payment List</a>
+
+{% endblock %}

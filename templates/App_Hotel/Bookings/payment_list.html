@@ -1,0 +1,73 @@
+{% extends 'layouts_hotel/base.html' %}
+{% load static %}
+{% block title %}
+All Payments
+{% endblock %}
+
+{% block content %}
+<section class="hero_in restaurants">
+    <div class="wrapper">
+        <div class="container">
+            <h1 class="fadeInUp"><span></span>Payment History</h1>
+        </div>
+    </div>
+</section>
+   
+
+<div class="container margin_60_35">
+        <!-- <h2 class="text-center mb-4"></h2> -->
+        <table class="table table-bordered payment-table">
+            <thead class="table-header">
+                <tr>
+                    <th>#</th>
+                    <th>Amount Paid</th>
+                    <th>Payment Date</th>
+                    <th>Bookings Paid For</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payments %}
+                    <tr>
+                        <td>{{ forloop.counter }}.</td>
+                        <td>${{ payment.amount }}</td>
+                        <td>{{ payment.payment_date }}</td>
+                        <td>
+                            <ul class="booking-details list-unstyled mb-0">
+                                {% for booking in payment.booking.all %}
+                                    <li>
+                                        <strong>Booking ID:</strong> {{ booking.id }}<br>
+                                        <strong>Hotel:</strong> {{ booking.room.hotel.name }}<br>
+                                        <strong>Room Type:</strong> {{ booking.room.room_type }}
+                                    </li>
+                                    <hr>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+        <style>
+            .table-container {
+                margin-top: 20px;
+            }
+            .payment-table th, .payment-table td {
+                vertical-align: middle;
+                text-align: center;
+            }
+            .payment-table .booking-details {
+                font-size: 0.9em;
+                color: #555;
+            }
+            .payment-table {
+                box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .table-header {
+                background-color: #007bff;
+                color: white;
+            }
+        </style>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Add Location
+{% endblock %}
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+ 
+{% endblock %}
+
+

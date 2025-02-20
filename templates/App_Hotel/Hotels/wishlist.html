@@ -1,0 +1,107 @@
+{% extends 'layouts_hotel/base.html' %}
+{% load static %}
+{% block title %}
+My Wishlists
+{% endblock %}
+
+{% block content %}
+
+<section class="hero_in tours">
+    <div class="wrapper">
+        <div class="container">
+            <h1 class="fadeInUp"><span></span>My Wishlist</h1>
+        </div>
+    </div>
+</section>
+
+<div class="container margin_60_35">
+
+    <div class="wrapper-grid">
+        {% if wishlist_items %}
+            <div class="row">
+                {% for item in wishlist_items %}
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <div class="box_grid">
+                            <figure>
+                                <a href="#0" class="wish_bt liked" data-hotel-id="{{ item.hotel.id }}" onclick="removeFromWishlist(event, {{ item.hotel.id }})">
+                                </a>
+                                <a href="{% url 'App_Hotel:hotel_detail' item.hotel.id %}">
+                                    <img src="{{ item.hotel.images.url }}" alt="{{ item.hotel.name }}" class="img-fluid" alt="" width="800" height="533">
+                                </a>
+                                <small>{{ item.hotel.location.name }}</small>
+                                <div class="read_more"><span>Read more</span></div>
+                            </figure>
+                            <div class="wrapper">
+                                <h3><a href="{% url 'App_Hotel:hotel_detail' item.hotel.id %}">{{ item.hotel.name }}</a></h3>
+                                <!-- <p>{{ item.hotel.price_per_night }}</p> -->
+                                <span class="price">From <strong>{{ item.hotel.price_per_night }}</strong> / night</span>
+                            </div>
+                            <ul>
+                                <li><i class="icon_clock_alt"></i> {{ item.added_date }}</li>
+                                <li><div class="score"><span>Superb<em>350 Reviews</em></span><strong>8.9</strong></div></li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+        <p>You have no hotels in your wishlist.</p>
+        {% endif %}
+    </div>
+    <div class="bg_color_1">
+        <div class="container margin_60_35">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="#0" class="boxed_list">
+                        <i class="pe-7s-help2"></i>
+                        <h4>Need Help? Contact us</h4>
+                        <p>Cum appareat maiestatis interpretaris et, et sit.</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#0" class="boxed_list">
+                        <i class="pe-7s-wallet"></i>
+                        <h4>Payments</h4>
+                        <p>Qui ea nemore eruditi, magna prima possit.</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#0" class="boxed_list">
+                        <i class="pe-7s-note2"></i>
+                        <h4>Cancel Policy</h4>
+                        <p>Hinc vituperata sed ut, pro laudem nonumes ex.</p>
+                    </a>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+
+</div>
+
+
+<script>
+    function removeFromWishlist(event, hotelId) {
+        event.preventDefault();
+
+        fetch(`{% url 'App_Hotel:remove_from_wishlist' 0 %}`.replace('0', hotelId), {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'removed') {
+                // Reload the page to reflect changes
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+
+{% endblock %}

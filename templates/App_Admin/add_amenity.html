@@ -1,0 +1,18 @@
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Add Amenity
+{% endblock %}
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'App_Auth:amenity_list' %}" class="btn" style="background-color: rgb(21, 85, 145);color: white; margin-top: 10px;">Back to Amenities</a>
+
+
+
+    
+{% endblock %}

@@ -1,0 +1,84 @@
+
+{% extends 'layouts_admin/base.html' %}
+{% load static %}
+{% block route %}
+Locations
+{% endblock %}
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        /* margin: 0; */
+        
+        background-color: #f4f4f9;
+    }
+    
+    h2 {
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+
+    .add-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        width: 180px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card img {
+        max-width: 80px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .no-icon {
+        font-size: 14px;
+        color: #666;
+    }
+</style>
+
+<div class="row">
+    <h2> <a href="{% url 'App_Auth:add_location' %}" class="btn" style="background-color: rgb(21, 85, 145);color: white;">Add Location</a> </h2>
+   
+    <div class="card-container" style="padding: 30px;">
+        {% for location in locations %}
+        <div class="card">
+            <div class="card-title">{{ location.name }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
+
